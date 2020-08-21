@@ -1,21 +1,24 @@
 import os
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+api = Api(app)
 
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+api.config.from_object(os.environ['APP_SETTINGS'])
+api.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(api)
 
 from models.university import University
 from models.subject import Subject
 
-@app.route("/")
+@api.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/getalluniversities")
+@api.route("/getalluniversities")
 def get_all_universities():
     try:
         universities = University.query.all()
@@ -24,7 +27,7 @@ def get_all_universities():
 	    return(str(e))
 
 
-@app.route("/getallsubjects")
+@api.route("/getallsubjects")
 def get_all_subjects():
     try:
         subjects = Subject.query.all()
@@ -34,4 +37,4 @@ def get_all_subjects():
 
 
 if __name__ == '__main__':
-    app.run()
+    api.run()
