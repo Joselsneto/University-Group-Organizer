@@ -13,7 +13,7 @@ We are using Python as the language with the following libraries:
 To install all python libraries run at the root of the repo:
 
 ```shell
-pip3 install flask psycopg2==2.8.4 Flask-SQLAlchemy===2.4.1 Flask-Migrate==2.5.2 Flask-Script==2.0.6 flask-cors
+pip3 install Flask==0.12.2 psycopg2==2.8.4 Flask-SQLAlchemy==2.4.4 Flask-Migrate==2.5.3 Flask-Script==2.0.6 flask-cors
 ```
 
 ## Running the database

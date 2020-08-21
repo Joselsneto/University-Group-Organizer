@@ -8,7 +8,6 @@ class Subject(db.Model):
     sigla = db.Column(db.String())
     professor = db.Column(db.String())
     link = db.Column(db.String())
-    groups = db.relationship('WhatsGroup', backref='subject', lazy=True)
     university_id = db.Column(db.Integer, db.ForeignKey('university.id'), nullable=False)
 
     def serialize(self):
