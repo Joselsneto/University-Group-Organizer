@@ -1,1 +1,1 @@
-export const baseUrl = 'URL';
+export const baseUrl = 'https://university-whats-organizer.herokuapp.com/';
