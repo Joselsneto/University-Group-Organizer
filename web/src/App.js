@@ -12,7 +12,7 @@ function App() {
     <Router history={createBrowserHistory()}>
       <Switch>
         <Route exact path='/' component={Universities} />
-        <Route exact path='/university/:id' component={Subjects} />
+        <Route exact path='/university/:id' children={<Subjects />} />
         <Route exact path='/*'>
           <Redirect to='/' />
         </Route>
