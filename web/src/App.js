@@ -1,24 +1,23 @@
 import React from 'react';
 import './App.css';
-import UniversitiesView from './views/universities_view/universities_view';
 
-import { Layout } from 'antd';
-import SubjectsView from './views/subjets_view/subject_view';
+import { Router, Switch, Redirect, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
-const { Header, Footer, Content } = Layout;
+import Universities from './views/universities_view/universities';
+import Subjects from './views/subjects_view/subjects';
 
 function App() {
   return (
-    <Layout>
-      <Header>
-        <h1 style={{color: 'white'}}>University Group Organizer</h1> 
-      </Header>
-      <Content>
-        {/* <UniversitiesView /> */}
-        <SubjectsView />
-      </Content>
-      <Footer>Footer</Footer>
-    </Layout>
+    <Router history={createBrowserHistory()}>
+      <Switch>
+        <Route exact path='/' component={Universities} />
+        <Route exact path='/university/:id' component={Subjects} />
+        <Route exact path='/*'>
+          <Redirect to='/' />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
