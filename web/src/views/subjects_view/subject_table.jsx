@@ -6,7 +6,6 @@ import { PlusOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
-
 class SubjectTable extends React.Component {
   constructor(props) {
     super(props);
@@ -43,13 +42,17 @@ class SubjectTable extends React.Component {
       ],
       visible: false,
       visibleGroupDrawer: false,
-      subjectId: 0
+      rowIndex: 0,
+      title: ''
     };
     this.formRef = React.createRef();
+    this.formGroup = React.createRef();
+    this.showGroupDrawer = this.showGroupDrawer.bind(this);
   }
 
   closeDrawer = () => {
     this.setState({visible:false});
+    this.formRef.current.resetFields();
   }
 
   showDrawer = () => {
@@ -58,14 +61,12 @@ class SubjectTable extends React.Component {
 
   closeGroupDrawer = () => {
     this.setState({visibleGroupDrawer: false});
+    this.formGroup.current.resetFields();
   }
 
-  showGroupDrawer = () => {
-    this.setState({visibleGroupDrawer: true});
-  }
-
-  addGroup = () => {
-
+  showGroupDrawer = (id) => {
+    let title = 'Adicionar grupo na matéria '.concat(this.state.data[id].initials, ' - ', this.state.data[id].name, ' com ', this.state.data[id].professor);
+    this.setState({title: title, rowIndex: id, visibleGroupDrawer: true});
   }
 
   addSubject = () => {
@@ -78,6 +79,16 @@ class SubjectTable extends React.Component {
     console.log(professor);
 
     this.closeDrawer();
+  }
+
+  addGroup = () => {
+    const link = this.formGroup.current.getFieldValue('link');
+    const subjectId = this.state.data[this.state.rowIndex].key;
+
+    console.log(link);
+    console.log(subjectId);
+
+    this.closeGroupDrawer();
   }
 
   render() {
@@ -139,8 +150,30 @@ class SubjectTable extends React.Component {
           visible={this.state.visibleGroupDrawer}
           width={300}
           onClose={this.closeGroupDrawer}
-          title={<p>{this.state.subjectId}</p>}
+          title={<p>{this.state.title}</p>}
+          footer={
+            <div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={this.closeGroupDrawer} style={{ marginRight: 8 }}>
+                Cancelar
+              </Button>
+              <Button onClick={this.addGroup} type="primary">
+                Adicionar
+              </Button>
+            </div>
+          }
         >
+          <Form ref={this.formGroup} layout='vertical'>
+            <Form.Item
+              name='link'
+              label='Link'
+            >
+              <Input placeholder='Entre com o link do grupo'/>
+            </Form.Item>            
+          </Form>
 
         </Drawer>
 

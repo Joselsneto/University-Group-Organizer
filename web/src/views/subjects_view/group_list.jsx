@@ -1,6 +1,6 @@
 import React from 'react';
-import { List, Button, Row, Drawer, Input } from 'antd';
-import Form from 'antd/lib/form/Form';
+import { List, Button, Row } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 class GroupList extends React.Component {
   constructor(props) {
@@ -28,7 +28,11 @@ class GroupList extends React.Component {
     console.log(link)
   }
 
-  render() {
+  showGroupDrawer = () => {
+    this.props.showGroupDrawer(this.props.id);
+  }
+
+  render() { 
     return (
       <div>
         <List
@@ -36,7 +40,7 @@ class GroupList extends React.Component {
           header={
             <Row style={{justifyContent: "space-between"}}>
               <strong>Grupos</strong>
-              <Button style={{alignSelf: 'end'}} type='primary' onClick={this.props.showGroupDrawer}>
+              <Button style={{alignSelf: 'end'}} type='primary' onClick={this.showGroupDrawer} icon={<PlusOutlined />}>
                 Adicionar
               </Button>
             </Row>
