@@ -17,8 +17,8 @@ class SubjectTable extends React.Component {
           name: 'Banco de dados',
           professor: 'Enzo Seraphim',
           groups: [
-            {link: 'https://google.com'},
-            {link: 'https://chat.whatsapp.com/BANCODEDADOS2'},
+            { link: 'https://google.com' },
+            { link: 'https://chat.whatsapp.com/BANCODEDADOS2' },
           ]
         },
         {
@@ -27,7 +27,7 @@ class SubjectTable extends React.Component {
           name: 'Circuitos elétricos I',
           professor: 'Jose Vitor Bernardes Junior',
           groups: [
-            {link: 'https://chat.whatsapp.com/CIRCUITOS1'}
+            { link: 'https://chat.whatsapp.com/CIRCUITOS1' }
           ]
         },
         {
@@ -36,7 +36,7 @@ class SubjectTable extends React.Component {
           name: 'Compiladores',
           professor: 'Thatyana de Faria Piola Seraphim',
           groups: [
-            {link: 'https://chat.whatsapp.com/COMPILADORES'}
+            { link: 'https://chat.whatsapp.com/COMPILADORES' }
           ]
         },
       ],
@@ -51,22 +51,22 @@ class SubjectTable extends React.Component {
   }
 
   closeDrawer = () => {
-    this.setState({visible:false});
+    this.setState({ visible: false });
     this.formRef.current.resetFields();
   }
 
   showDrawer = () => {
-    this.setState({visible:true});
+    this.setState({ visible: true });
   }
 
   closeGroupDrawer = () => {
-    this.setState({visibleGroupDrawer: false});
+    this.setState({ visibleGroupDrawer: false });
     this.formGroup.current.resetFields();
   }
 
   showGroupDrawer = (id) => {
     let title = 'Adicionar grupo na matéria '.concat(this.state.data[id].initials, ' - ', this.state.data[id].name, ' com ', this.state.data[id].professor);
-    this.setState({title: title, rowIndex: id, visibleGroupDrawer: true});
+    this.setState({ title: title, rowIndex: id, visibleGroupDrawer: true });
   }
 
   addSubject = () => {
@@ -93,9 +93,9 @@ class SubjectTable extends React.Component {
 
   render() {
     const columns = [
-      {title: 'Sigla', dataIndex: 'initials', key: 'initials'},
-      {title: 'Materia', dataIndex: 'name', key: 'name'},
-      {title: 'Professor', dataIndex: 'professor', key: 'professor'},
+      { title: 'Sigla', dataIndex: 'initials', key: 'initials' },
+      { title: 'Materia', dataIndex: 'name', key: 'name' },
+      { title: 'Professor', dataIndex: 'professor', key: 'professor' },
     ];
 
     return (
@@ -125,23 +125,23 @@ class SubjectTable extends React.Component {
               name='initials'
               label='Sigla da matéria'
             >
-              <Input placeholder='Entre com a sigla da matéria'/>
+              <Input placeholder='Entre com a sigla da matéria' />
             </Form.Item>
 
             <Form.Item
               name='subject'
               label='Matéria'
             >
-              <Input placeholder='Entre com o nome da matéria'/>
+              <Input placeholder='Entre com o nome da matéria' />
             </Form.Item>
 
             <Form.Item
               name='professor'
               label='Professor'
             >
-              <Input placeholder='Entre com o nome do professor'/>
+              <Input placeholder='Entre com o nome do professor' />
             </Form.Item>
-  
+
           </Form>
 
         </Drawer>
@@ -171,23 +171,23 @@ class SubjectTable extends React.Component {
               name='link'
               label='Link'
             >
-              <Input placeholder='Entre com o link do grupo'/>
-            </Form.Item>            
+              <Input placeholder='Entre com o link do grupo' />
+            </Form.Item>
           </Form>
 
         </Drawer>
 
-        <Row style={{marginBottom: 12, justifyContent: "space-between"}}>
+        <Row style={{ marginBottom: 12, justifyContent: "space-between" }}>
           <Search
-              placeholder="Entre com a sigla da matéria ou o nome da matéria ou nome do professor"
-              onSearch={value => console.log(value)}
-              onChange={value => console.log(value.target.value)}
-              style={{width: "auto", flex: 1}}
-            />
+            placeholder="Entre com a sigla da matéria ou o nome da matéria ou nome do professor"
+            onSearch={value => console.log(value)}
+            onChange={value => console.log(value.target.value)}
+            style={{ width: "auto", flex: 1 }}
+          />
 
-          <Button 
-            type="primary" 
-            style={{ alignSelf: "end", marginLeft: 12}} 
+          <Button
+            type="primary"
+            style={{ alignSelf: "end", marginLeft: 12 }}
             onClick={this.showDrawer}
             icon={<PlusOutlined />}
           >
@@ -195,11 +195,12 @@ class SubjectTable extends React.Component {
           </Button>
         </Row>
 
-        <Table 
-          columns = {columns}
-          dataSource = {this.state.data}
-          expandable = {{
-            expandedRowRender: (record, rowIndex) => <p style={{ margin: 0 }}>{<GroupList groups={record.groups} id={rowIndex} showGroupDrawer={this.showGroupDrawer} closeModal={this.closeModal}/> }</p>,
+        <Table
+          tableLayout='auto'
+          columns={columns}
+          dataSource={this.state.data}
+          expandable={{
+            expandedRowRender: (record, rowIndex) => <p style={{ margin: 0 }}>{<GroupList groups={record.groups} id={rowIndex} showGroupDrawer={this.showGroupDrawer} closeModal={this.closeModal} />}</p>,
             rowExpandable: record => true,
           }}
         />

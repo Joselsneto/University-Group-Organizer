@@ -12,6 +12,7 @@ db = SQLAlchemy(app)
 
 from models.university import University
 from models.subject import Subject
+from models.group import Group
 
 
 @app.route("/")
@@ -28,10 +29,10 @@ def get_all_universities():
 	    return(str(e))
 
 
-@app.route("/getuniversity/<sigla_>")
-def get_university_by_sigla(sigla_):
+@app.route("/getuniversity/<initials_>")
+def get_university_by_initials(initials_):
     try:
-        university = University.query.filter_by(sigla = sigla_).first()
+        university = University.query.filter_by(initials = initials_).first()
         return jsonify(university.serialize())
     except Exception as e:
 	    return(str(e))
@@ -67,11 +68,11 @@ def get_subject_by_id(id_):
 @app.route("/adduniversity")
 def add_university():
     name = request.args.get('name')
-    sigla = request.args.get('sigla')
+    initials = request.args.get('initials')
     try:
         new_university = University(
             name = name,
-            sigla = sigla
+            initials = initials
         )
         db.session.add(new_university)
         db.session.commit()
@@ -83,16 +84,14 @@ def add_university():
 @app.route("/addsubject")
 def add_subject():
     name = request.args.get('name')
-    sigla = request.args.get('sigla')
+    initials = request.args.get('initials')
     professor = request.args.get('professor')
-    link = request.args.get('link')
     university_id = request.args.get('university_id')
     try:
         new_subject = Subject(
             name = name,
-            sigla = sigla,
+            initials = initials,
             professor = professor,
-            link = link,
             university_id = university_id
         )
         db.session.add(new_subject)
