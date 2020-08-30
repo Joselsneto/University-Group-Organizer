@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Table, Input, Button, Drawer, Row, Form } from 'antd';
 import { baseUrl } from '../../apiConfig';
 import { RightOutlined } from '@ant-design/icons';
@@ -13,16 +13,7 @@ function UniversitiesTable(props) {
 
   const formRef = React.createRef();
   const [data, setData] = useState([
-    {
-      id: 0,
-      name: 'Universidade Federal de Itajubá',
-      initials: 'UNIFEI'
-    },
-    {
-      id: 1,
-      name: 'Universidade de São Paulo',
-      initials: 'USP'
-    },
+    
   ]);
   const [visible, setVisible] = useState(false);
 
@@ -34,29 +25,54 @@ function UniversitiesTable(props) {
     setVisible(true);
   }
 
-  // componentDidMount() {
-  //   this.getAllUniversities();
-  // }
+  useEffect(() => {
+    getAllUniversities();
+  }, []);
 
   const getAllUniversities = async () => {
     try {
       const answer = await fetch(baseUrl + 'getalluniversities', {
         method: 'GET'
-      })
-
-      const json = await answer.json()
+      });
+      const json = await answer.json();
       setData(json);
     } catch (error) {
+      console.log(error);
+    }
+  }
 
+  const searchUniversities = async (search) => {
+    try {
+      const answer = await fetch(baseUrl + 'searchuniversities/' + search, {
+        method: 'GET'
+      });
+      const json = await answer.json();
+      setData(json);
+    } catch (error) {
+      console.log(error);
     }
   }
 
   const addUniversity = async () => {
-    const initials = formRef.current.getFieldValue("initials")
-    const name = formRef.current.getFieldValue("name")
-    console.log(initials)
-    console.log(name)
-    
+    const initials = formRef.current.getFieldValue("initials");
+    const name = formRef.current.getFieldValue("name");
+    try {
+      const answer = await fetch(baseUrl + 'adduniversity', {
+        method: 'POST',
+        body: JSON.stringify({
+          "initials": initials,
+          "name": name
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+
+      console.log(answer);
+    } catch (error) {
+      console.log(error);
+    }
+    await getAllUniversities();
     closeDrawer();
   }
 
@@ -131,9 +147,8 @@ function UniversitiesTable(props) {
 
     <Row style={{marginBottom: 12, justifyContent: "space-between"}}>
       <Search
-          placeholder="Entre com o nome da sua universidade"
-          onSearch={value => console.log(value)}
-          onChange={value => console.log(value.target.value)}
+          placeholder="Entre com o nome da sua universidade ou com a sigla"
+          onSearch={value => searchUniversities(value)}
           style={{width: "auto", flex: 1}}
         />
 

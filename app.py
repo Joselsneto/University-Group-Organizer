@@ -29,11 +29,12 @@ def get_all_universities():
 	    return(str(e))
 
 
-@app.route("/getuniversity/<initials_>")
-def get_university_by_initials(initials_):
+@app.route("/searchuniversities/<value_>")
+def get_university_by_initials(value_):
     try:
-        university = University.query.filter_by(initials = initials_).first()
-        return jsonify(university.serialize())
+        search = "%{}%".format(value_)
+        universities = University.query.filter(University.initials.ilike(search) | University.name.ilike(search)).all()
+        return jsonify([e.serialize() for e in universities])
     except Exception as e:
 	    return(str(e))
 
@@ -65,10 +66,10 @@ def get_subject_by_id(id_):
 	    return(str(e))
 
 
-@app.route("/adduniversity")
+@app.route("/adduniversity", methods=['POST'])
 def add_university():
-    name = request.args.get('name')
-    initials = request.args.get('initials')
+    name = request.json.get('name')
+    initials = request.json.get('initials')
     try:
         new_university = University(
             name = name,
@@ -81,12 +82,12 @@ def add_university():
 	    return(str(e))
 
 
-@app.route("/addsubject")
+@app.route("/addsubject", methods=['POST'])
 def add_subject():
-    name = request.args.get('name')
-    initials = request.args.get('initials')
-    professor = request.args.get('professor')
-    university_id = request.args.get('university_id')
+    name = request.json.get('name')
+    initials = request.json.get('initials')
+    professor = request.json.get('professor')
+    university_id = request.json.get('university_id')
     try:
         new_subject = Subject(
             name = name,

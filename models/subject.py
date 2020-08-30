@@ -13,6 +13,7 @@ class Subject(db.Model):
     def serialize(self):
         return {
             'id': self.id, 
+            'key': self.id,
             'name': self.name,
             'initials': self.initials,
             'professor': self.professor,

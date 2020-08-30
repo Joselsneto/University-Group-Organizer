@@ -8,7 +8,8 @@ class University(db.Model):
 
     def serialize(self):
         return {
-            'id': self.id, 
+            'id': self.id,
+            'key': self.id, 
             'name': self.name,
             'initials': self.initials
         }
