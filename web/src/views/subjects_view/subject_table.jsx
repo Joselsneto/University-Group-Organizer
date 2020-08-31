@@ -10,36 +10,7 @@ class SubjectTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        {
-          key: 0,
-          initials: 'ECOT03',
-          name: 'Banco de dados',
-          professor: 'Enzo Seraphim',
-          groups: [
-            { link: 'https://google.com' },
-            { link: 'https://chat.whatsapp.com/BANCODEDADOS2' },
-          ]
-        },
-        {
-          key: 1,
-          initials: 'EEL105',
-          name: 'Circuitos elétricos I',
-          professor: 'Jose Vitor Bernardes Junior',
-          groups: [
-            { link: 'https://chat.whatsapp.com/CIRCUITOS1' }
-          ]
-        },
-        {
-          key: 2,
-          initials: 'ECOM06',
-          name: 'Compiladores',
-          professor: 'Thatyana de Faria Piola Seraphim',
-          groups: [
-            { link: 'https://chat.whatsapp.com/COMPILADORES' }
-          ]
-        },
-      ],
+      data: [],
       visible: false,
       visibleGroupDrawer: false,
       rowIndex: 0,
@@ -48,6 +19,22 @@ class SubjectTable extends React.Component {
     this.formRef = React.createRef();
     this.formGroup = React.createRef();
     this.showGroupDrawer = this.showGroupDrawer.bind(this);
+  }
+
+  componentDidMount() {
+    this.getSubjects();
+  }
+
+  getSubjects = async () => {
+    try {
+      const answer = await fetch(baseUrl + 'getsubjects/' + this.props.universityId, {
+        method: 'GET'
+      });
+      const json = await answer.json();
+      this.setState({data:json});
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   closeDrawer = () => {
@@ -69,15 +56,30 @@ class SubjectTable extends React.Component {
     this.setState({ title: title, rowIndex: id, visibleGroupDrawer: true });
   }
 
-  addSubject = () => {
+  addSubject = async () => {
     const initials = this.formRef.current.getFieldValue('initials');
     const subject = this.formRef.current.getFieldValue('subject');
     const professor = this.formRef.current.getFieldValue('professor');
 
-    console.log(initials);
-    console.log(subject);
-    console.log(professor);
+    try {
+      const answer = await fetch(baseUrl + 'addsubject', {
+        method: 'POST',
+        body: JSON.stringify({
+          "initials": initials,
+          "name": subject,
+          "professor": professor,
+          "university_id": this.props.universityId 
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      console.log(answer);
+    } catch (error) {
+      console.log(error);
+    }
 
+    this.getSubjects();
     this.closeDrawer();
   }
 
