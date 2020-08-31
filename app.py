@@ -28,6 +28,14 @@ def get_all_universities():
     except Exception as e:
 	    return(str(e))
 
+@app.route("/getuniversity/<id_>")
+def get_university_by_id(id_):
+    try:
+        university = University.query.filter_by(id=id_).first();
+        return jsonify(university.serialize())
+    except Exception as e:
+        return(str(e))
+
 
 @app.route("/searchuniversities/<value_>")
 def get_university_by_initials(value_):
