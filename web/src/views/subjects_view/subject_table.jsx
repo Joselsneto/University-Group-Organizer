@@ -83,12 +83,25 @@ class SubjectTable extends React.Component {
     this.closeDrawer();
   }
 
-  addGroup = () => {
+  addGroup = async () => {
     const link = this.formGroup.current.getFieldValue('link');
     const subjectId = this.state.data[this.state.rowIndex].key;
 
-    console.log(link);
-    console.log(subjectId);
+    try {
+      const answer = await fetch(baseUrl + 'addgroup', {
+        method: 'POST',
+        body: JSON.stringify({
+          "link": link,
+          "subject_id": subjectId
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      console.log(answer);
+    } catch (error) {
+      console.log(error);
+    }
 
     this.closeGroupDrawer();
   }
@@ -202,7 +215,7 @@ class SubjectTable extends React.Component {
           columns={columns}
           dataSource={this.state.data}
           expandable={{
-            expandedRowRender: (record, rowIndex) => <p style={{ margin: 0 }}>{<GroupList groups={record.groups} id={rowIndex} showGroupDrawer={this.showGroupDrawer} closeModal={this.closeModal} />}</p>,
+            expandedRowRender: (record, rowIndex) => <p style={{ margin: 0 }}>{<GroupList groups={record.groups} id={record.id} rowIndex={rowIndex} showGroupDrawer={this.showGroupDrawer}/>}</p>,
             rowExpandable: record => true,
           }}
         />

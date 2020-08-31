@@ -24,7 +24,7 @@ function SubjectsView(props) {
   }
 
   return (
-    <Layout style={{padding: 24, height: '80vh'}}>
+    <Layout style={{padding: 24, height: '100vh'}}>
       <h1>{university.name}</h1>
       <SubjectTable universityId={props.universityId}/>
     </Layout>

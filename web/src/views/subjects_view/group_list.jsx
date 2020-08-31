@@ -1,14 +1,32 @@
 import React from 'react';
 import { List, Button, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { baseUrl } from '../../apiConfig';
 
 class GroupList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
+      groups: []
     }
     this.formRef = React.createRef
+  }
+
+  componentDidMount() {
+    this.getGroups();
+  }
+
+  getGroups = async () => {
+    try {
+      const answer = await fetch(baseUrl + 'getgroups/' + this.props.id, {
+        method: 'GET'
+      });
+      const json = await answer.json();
+      this.setState({groups:json});
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   openDrawer = () => {
@@ -29,7 +47,7 @@ class GroupList extends React.Component {
   }
 
   showGroupDrawer = () => {
-    this.props.showGroupDrawer(this.props.id);
+    this.props.showGroupDrawer(this.props.rowIndex);
   }
 
   render() { 
@@ -46,7 +64,7 @@ class GroupList extends React.Component {
             </Row>
           }
           bordered
-          dataSource={this.props.groups}
+          dataSource={this.state.groups}
           renderItem={item => 
             <List.Item>
               <td onClick={() => window.open(item.link, '_blank')}>

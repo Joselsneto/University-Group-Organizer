@@ -18,7 +18,7 @@ function Subjects(){
       <Content>
         <SubjectView universityId={id}/>
       </Content>
-      <Footer>Footer</Footer>
+      <Footer style={{bottom: 0, width: '100%'}}>Footer</Footer>
     </Layout>
   );
   

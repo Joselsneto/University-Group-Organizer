@@ -38,7 +38,7 @@ def get_university_by_id(id_):
 
 
 @app.route("/searchuniversities/<value_>")
-def get_university_by_initials(value_):
+def search_universities(value_):
     try:
         search = "%{}%".format(value_)
         universities = University.query.filter(University.initials.ilike(search) | University.name.ilike(search)).all()
@@ -56,10 +56,10 @@ def get_all_subjects():
 	    return(str(e))
 
 
-@app.route("/getsubjects/<uni_id_>")
-def get_subjects_by_university_id(uni_id_):
+@app.route("/getsubjects/<university_id_>")
+def get_subjects_by_university_id(university_id_):
     try:
-        subjects = Subject.query.filter_by(university_id = uni_id_)
+        subjects = Subject.query.filter_by(university_id = university_id_)
         return jsonify([e.serialize() for e in subjects])
     except Exception as e:
 	    return(str(e))
@@ -72,6 +72,14 @@ def get_subject_by_id(id_):
         return jsonify(subject.serialize())
     except Exception as e:
 	    return(str(e))
+
+@app.route("/getgroups/<subject_id_>")
+def get_groups_by_subject_id(subject_id_):
+    try:
+        groups = Group.query.filter_by(subject_id = subject_id_)
+        return jsonify([e.serialize() for e in groups])
+    except Exception as e:
+        return(str(e))
 
 
 @app.route("/adduniversity", methods=['POST'])
@@ -108,6 +116,21 @@ def add_subject():
         return "New Subject added."
     except Exception as e:
 	    return(str(e))
+
+@app.route("/addgroup", methods=['POST'])
+def add_group():
+    subject_id = request.json.get('subject_id')
+    link = request.json.get('link')
+    try:
+        new_group = Group(
+            link = link,
+            subject_id = subject_id
+        )
+        db.session.add(new_group)
+        db.session.commit()
+        return "New Group added."
+    except Exception as e:
+        return(str(e))
 
 
 if __name__ == '__main__':
