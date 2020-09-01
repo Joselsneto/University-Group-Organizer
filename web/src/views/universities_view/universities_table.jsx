@@ -42,6 +42,10 @@ function UniversitiesTable(props) {
   }
 
   const searchUniversities = async (search) => {
+    if(search === "") {
+      this.getAllUniversities();
+      return;
+    }
     try {
       const answer = await fetch(baseUrl + 'searchuniversities/' + search, {
         method: 'GET'

@@ -37,6 +37,22 @@ class SubjectTable extends React.Component {
     }
   }
 
+  searchSubjects = async (value) => {
+    if(value === "") {
+      this.getSubjects();
+      return;
+    }
+    try {
+      const answer = await fetch(baseUrl + 'searchsubjects/' + this.props.universityId + '/' + value, {
+        method: 'GET'
+      });
+      const json = await answer.json();
+      this.setState({data:json});
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   closeDrawer = () => {
     this.setState({ visible: false });
     this.formRef.current.resetFields();
@@ -195,8 +211,7 @@ class SubjectTable extends React.Component {
         <Row style={{ marginBottom: 12, justifyContent: "space-between" }}>
           <Search
             placeholder="Entre com a sigla da matéria ou o nome da matéria ou nome do professor"
-            onSearch={value => console.log(value)}
-            onChange={value => console.log(value.target.value)}
+            onSearch={value => this.searchSubjects(value)}
             style={{ width: "auto", flex: 1 }}
           />
 

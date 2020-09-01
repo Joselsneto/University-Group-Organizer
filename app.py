@@ -46,6 +46,15 @@ def search_universities(value_):
     except Exception as e:
 	    return(str(e))
 
+@app.route("/searchsubjects/<university_id_>/<value_>")
+def search_subjects(university_id_ ,value_):
+    try:
+        search = "%{}%".format(value_)
+        subjects = Subject.query.filter(Subject.initials.ilike(search) | Subject.name.ilike(search) | Subject.professor.ilike(search)).filter_by(university_id=university_id_).all()
+        return jsonify([e.serialize() for e in subjects])
+    except Exception as e:
+        return(str(e))
+
 
 @app.route("/getallsubjects")
 def get_all_subjects():
