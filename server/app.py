@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
+from checker import Checker
 
 app = Flask(__name__)
 CORS(app)
@@ -95,7 +96,9 @@ def get_groups_by_subject_id(subject_id_):
 def add_university():
     name = request.json.get('name')
     initials = request.json.get('initials')
+    checker = Checker(name=name, initials=initials)
     try:
+        checker.checkUniversity()
         new_university = University(
             name = name,
             initials = initials
@@ -113,7 +116,9 @@ def add_subject():
     initials = request.json.get('initials')
     professor = request.json.get('professor')
     university_id = request.json.get('university_id')
+    checker = Checker(name=name, initials=initials, professor=professor, university_id=university_id)
     try:
+        checker.checkSubject()
         new_subject = Subject(
             name = name,
             initials = initials,
@@ -130,7 +135,9 @@ def add_subject():
 def add_group():
     subject_id = request.json.get('subject_id')
     link = request.json.get('link')
+    checker = Checker(subject_id=subject_id, link=link)
     try:
+        checker.checkGroup()
         new_group = Group(
             link = link,
             subject_id = subject_id
